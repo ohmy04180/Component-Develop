@@ -1,11 +1,13 @@
 <template>
-  <div>
-    hoho
-  </div>
+	<div>
+		<Pagination></Pagination>
+	</div>
 </template>
 
 <script>
-  export default {
+import Pagination from "../components/Pagination";
 
-  }
+export default {
+	components: {Pagination}
+}
 </script>
