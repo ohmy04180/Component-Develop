@@ -14,6 +14,8 @@ import { ref, defineComponent } from "vue";
 export default defineComponent({
   setup() {
     // DATA
+    // TODO: [개발] currentPage를 가져와서 게시글 목록 보여주기
+    // 예) 1번 currentPage를 가져왔을 때, 0-9개의 목록을 보여준다.
     // 게시글 리스트
     const postList: object[] = [
       { title: "Title", postContent: "This is Content" },
