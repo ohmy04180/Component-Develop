@@ -11,11 +11,7 @@
       <
     </button>
     <ul class="pagination-list">
-      <li
-        class="pagination-item"
-        v-for="item in slicedPaginationData"
-        :key="item"
-      >
+      <li class="pagination-item" v-for="item in paginationList" :key="item">
         <button
           type="button"
           class="pagination-button"
@@ -38,87 +34,81 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, computed } from "vue";
+import { ref, defineComponent } from "vue";
 
 export default defineComponent({
-  props: ["paginationData", "postData"],
+  props: ["paginationList", "paginationCount"],
   setup(props, { emit }) {
-    //	** DATA
-    // 총 게시글 수
-    const totalCount: object[] = props.postData.length;
-    // 보여질 숫자 버튼 개수 (10개씩 보기, 20개씩 보기)
-    const perPage = ref(10);
-    // 현재 페이지 (Default: 1)
+    //	DATA
+    // 현재 페이지 (Default 값 = 1)
     let currentPage = ref(1);
-    // 페이지네이션에 몇 개의 페이지가 보이게 할 것인지
-    const pageSize: number = 10;
     // disabled 체크
     let isPrevDisabled = ref(false);
     let isNextDisabled = ref(false);
 
-    // ** COMPUTED
-    // 처음 진입 시 보여질 페이지네이션 개수 출력
-    const slicedPaginationData = computed(() => {
-      return props.paginationData.slice(0, perPage.value);
-    });
-
     //	** METHODS
-
-    // TODO: [개발]
-    // let totalPage = Math.ceil(totalCount.length / pageSize.value);
-
-    // 숫자 버튼 클릭시 해당하는 데이터 목록을 출력한다.
+    // 숫자 버튼 클릭시 해당하는 데이터 목록을 출력
     function movePage(item: number) {
-      // 이전 / 다음으로 버튼 비활성화 체크
       checkPrevDisabled(item);
       checkNextDisabled(item);
 
-      // 현재 페이지 상태 설정
       isSelectedClass(item);
     }
 
-    // TODO: [개발] currentPage 변화 감지, emit 발생
+    // 클릭한 선택 값을 currentPage에 부여
     function isSelectedClass(item: number) {
       currentPage.value = item;
-
-      // test
-      // console.log("currentPage.value", currentPage.value);
     }
 
-    // TODO: [개발] 1번째 순서에 도달했을 경우, 이전 버튼 비활성화
+    // 첫번째 순서에 도달했을 경우, 이전 버튼 비활성화
     function checkPrevDisabled(item: number): void {
-      isPrevDisabled.value = item === props.paginationData[0] ? true : false;
+      isPrevDisabled.value = item === props.paginationList[0] ? true : false;
     }
 
-    // TODO: [개발] 마지막 순서에 도달했을 경우, 다음 버튼 비활성화
+    // 마지막 순서에 도달했을 경우, 다음 버튼 비활성화
     function checkNextDisabled(item: number): void {
       isNextDisabled.value =
-        item == props.paginationData[props.paginationData.length - 1]
+        item == props.paginationList[props.paginationList.length - 1]
           ? true
           : false;
     }
 
+    // 이전 버튼 클릭 시 currentPage 값 변경 + 비활성화 설정
     function movePrevPage() {
-      console.log("다음 페이지로 이동");
+      if (currentPage.value > 0) {
+        currentPage.value = currentPage.value - 1;
+
+        isPrevDisabled.value = currentPage.value == 1 ? true : false;
+      } else {
+        return;
+      }
+
+      isNextDisabled.value =
+        currentPage.value < props.paginationCount ? false : true;
     }
 
+    // 다음 버튼 클릭 시 currentPage 값 변경 + 비활성화 설정
     function moveNextPage() {
-      console.log("이전 페이지로 이동");
+      if (currentPage.value < props.paginationCount) {
+        currentPage.value = currentPage.value + 1;
+
+        isNextDisabled.value =
+          currentPage.value === props.paginationCount ? true : false;
+      } else {
+        return;
+      }
+
+      isPrevDisabled.value = currentPage.value > 0 ? false : true;
     }
 
     return {
-      slicedPaginationData,
       isPrevDisabled,
       isNextDisabled,
       movePage,
       movePrevPage,
-      totalCount,
-      perPage,
+      moveNextPage,
       currentPage,
-      pageSize,
-      isSelectedClass,
-      checkPrevDisabled,
-      checkNextDisabled
+      isSelectedClass
     };
   }
 });

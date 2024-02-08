@@ -2,8 +2,8 @@
   <div>
     <div></div>
     <Pagination
-      :paginationData="paginationList"
-      :postData="postList"
+      :paginationCount="paginationCount"
+      :paginationList="paginationList"
     ></Pagination>
   </div>
 </template>
@@ -13,11 +13,61 @@ import { ref, defineComponent } from "vue";
 
 export default defineComponent({
   setup() {
-    const paginationList: Array<number> = [
-      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
-    ];
-
+    // DATA
+    // 게시글 리스트
     const postList: object[] = [
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
+      { title: "Title", postContent: "This is Content" },
       { title: "Title", postContent: "This is Content" },
       { title: "Title", postContent: "This is Content" },
       { title: "Title", postContent: "This is Content" },
@@ -29,7 +79,28 @@ export default defineComponent({
       { title: "Title", postContent: "This is Content" },
       { title: "Title", postContent: "This is Content" }
     ];
-    return { paginationList, postList };
+    // 총 게시글 수
+    const totalCount: number = postList.length;
+    // 보여질 게시글 개수 (10개씩 보기, 20개씩 보기)
+    const perPage: number = 10;
+
+    // 페이지네이션 개수에 맞는 배열을 담을 공간
+    let paginationList = ref([]);
+
+    let paginationCount: number = Math.ceil(totalCount / perPage);
+
+    // Created: paginationList에 paginationCount 만큼 배열로 담는다.
+    for (let i: number = 1; i <= paginationCount; i++) {
+      paginationList.value.push(i as never);
+    }
+
+    return {
+      postList,
+      totalCount,
+      perPage,
+      paginationCount,
+      paginationList
+    };
   }
 });
 </script>
