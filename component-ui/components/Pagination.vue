@@ -8,7 +8,7 @@
 		>
 			<
 		</button>
-		<ul class="pagination-list">
+		<ul v-if="paginationTotalCount <= 7" class="pagination-list">
 			<li class="pagination-item" v-for="(item, index) in paginationList" :key="index">
 				<button
 					type="button"
@@ -17,6 +17,41 @@
 					:class="item === currentPage ? 'is-active' : ''"
 				>
 					{{ item }}
+				</button>
+			</li>
+		</ul>
+		<ul v-else class="pagination-list">
+			<li class="pagination-item">
+				<button
+					type="button"
+					class="pagination-button"
+					@click="movePage(paginationList[0])"
+					:class="paginationList[0] === currentPage ? 'is-active' : ''"
+					key="0"
+
+				>
+					{{ paginationList[0]}}
+				</button>
+			</li>
+			<li class="pagination-item" v-for="(item, index) in paginationList.slice(1, -1)" :key="index">
+				<button
+					type="button"
+					class="pagination-button"
+					@click="movePage(item)"
+					:class="item === currentPage ? 'is-active' : ''"
+				>
+					{{ item }}
+				</button>
+			</li>
+			<li class="pagination-item">
+				<button
+					type="button"
+					class="pagination-button"
+					@click="movePage(paginationList[paginationTotalCount-1])"
+					:class="paginationList[paginationTotalCount-1] === currentPage ? 'is-active' : ''"
+					:key="paginationTotalCount-1"
+				>
+					{{ paginationList[paginationTotalCount-1]}}
 				</button>
 			</li>
 		</ul>
