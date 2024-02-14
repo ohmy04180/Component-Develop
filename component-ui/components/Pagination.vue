@@ -4,7 +4,7 @@
 			class="pagination-move-button"
 			type="button"
 			@click="movePrevPage"
-			:disabled="isPrevDisabled"
+			:disabled="currentPage === 1"
 		>
 			<
 		</button>
@@ -24,7 +24,7 @@
 			class="pagination-move-button"
 			type="button"
 			@click="moveNextPage"
-			:disabled="isNextDisabled"
+			:disabled="currentPage === paginationTotalCount"
 		>
 			>
 		</button>
@@ -35,85 +35,41 @@
 import {ref} from "vue";
 
 const props = defineProps({
-	perPage: Number,
-	totalCount: Number
+	totalCount: {
+		type: Number,
+		default: 0
+	},
+	perPage: {
+		type: Number,
+		default: 20
+	},
+	currentPage: {
+		type: Number,
+		default: 1
+	}
 });
 
-const emit = defineEmits(["checkCurrentPage"]);
+const emit = defineEmits(["change"]);
 
 //	DATA
-// 총 게시글 수 / 보여질 게시글 수
-const paginationCount: number = Math.ceil(props.totalCount / props.perPage);
-// 현재 페이지 (Default = 1)
-let currentPage = ref(1);
-// 페이지네이션 목록화
-let paginationList = ref([]);
-// 이전/다음 버튼 비활성화 체크
-let isPrevDisabled = ref(true);
-let isNextDisabled = paginationCount !== 1 ? ref(false) : ref(true)
-
-// CREATED
-for (let i: number = 1; i <= paginationCount; i++) {
-	paginationList.value.push(i as never);
-}
+const paginationTotalCount = ref<Number>(Math.ceil(props.totalCount / props.perPage));
+const currentPage = ref<Number>(props.currentPage);
+const paginationList = ref(Array.from({length: paginationTotalCount.value}, (_, i) => i + 1));
 
 //	METHODS
-// 클릭한 버튼 감지
-function movePage(item: number): void {
-	checkPrevDisabled(item);
-	checkNextDisabled(item);
-	isSelectedClass(item);
-	emit("checkCurrentPage", item);
+function movePage(page: number): void {
+	currentPage.value = page;
+	emit("change", page);
 }
 
-// 클릭한 선택 값을 currentPage에 부여
-function isSelectedClass(item: number): void {
-	currentPage.value = item;
-}
-
-// 첫번째 순서에 도달했을 경우 이전 버튼 비활성화
-function checkPrevDisabled(item: number): void {
-	isPrevDisabled.value = item === paginationList.value[0] ? true : false;
-}
-
-// 마지막 순서에 도달했을 경우 다음 버튼 비활성화
-function checkNextDisabled(item: number): void {
-	isNextDisabled.value =
-		item == paginationList.value[paginationList.value.length - 1]
-			? true
-			: false;
-}
-
-// 이전 버튼 클릭 시 currentPage 값 변경 + 비활성화 체크
 function movePrevPage(): void {
-	if (currentPage.value > 0) {
-		currentPage.value = currentPage.value - 1;
-
-		isPrevDisabled.value = currentPage.value == 1 ? true : false;
-	} else {
-		return;
-	}
-
-	isNextDisabled.value =
-		currentPage.value < paginationCount ? false : true;
-
-	emit("checkCurrentPage", currentPage.value);
+	let page = currentPage.value;
+	movePage(--page);
 }
 
-// 다음 버튼 클릭 시 currentPage 값 변경 + 비활성화 체크
 function moveNextPage(): void {
-	if (currentPage.value < paginationCount) {
-		currentPage.value = currentPage.value + 1;
-
-		isNextDisabled.value =
-			currentPage.value === paginationCount ? true : false;
-	} else {
-		return;
-	}
-
-	isPrevDisabled.value = currentPage.value > 0 ? false : true;
-
-	emit("checkCurrentPage", currentPage.value);
+	let page = currentPage.value;
+	movePage(++page);
 }
 
 </script>

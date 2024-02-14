@@ -4,14 +4,14 @@
 		<Pagination
 			:totalCount="totalCount"
 			:perPage="perPage"
-			@checkCurrentPage="checkCurrentPage"
+			:currentPage="currentPage"
+			@change="checkCurrentPage"
 		></Pagination>
 	</div>
 </template>
 
 <script setup lang="ts">
 // DATA
-// 게시글 리스트
 const postList: object[] = [
 	{title: "Title1", postContent: "This is Content"},
 	{title: "Title2", postContent: "This is Content"},
@@ -76,14 +76,13 @@ const postList: object[] = [
 	{title: "Title", postContent: "This is Content"},
 	{title: "Title", postContent: "This is Content"}
 ];
-// 총 게시글 수
 const totalCount: number = postList.length;
-// 보여질 게시글 개수 (10개씩 보기, 20개씩 보기)
 const perPage: number = 10;
+const currentPage = 1;
 
 // METHODS
 function checkCurrentPage(item): void {
-	console.log('emit item: ', item)
+	console.log('Emit currentPage: ', item)
 }
 </script>
 <style>
