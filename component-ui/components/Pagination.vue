@@ -3,7 +3,7 @@
 		<button
 			class="pagination-move-button"
 			type="button"
-			@click="movePrevPage"
+			@click="movePage(--currentPage)"
 			:disabled="currentPage === 1"
 		>
 			<
@@ -23,7 +23,7 @@
 		<button
 			class="pagination-move-button"
 			type="button"
-			@click="moveNextPage"
+			@click="movePage(++currentPage)"
 			:disabled="currentPage === paginationTotalCount"
 		>
 			>
@@ -60,16 +60,6 @@ const paginationList = ref(Array.from({length: paginationTotalCount.value}, (_, 
 function movePage(page: number): void {
 	currentPage.value = page;
 	emit("change", page);
-}
-
-function movePrevPage(): void {
-	let page = currentPage.value;
-	movePage(--page);
-}
-
-function moveNextPage(): void {
-	let page = currentPage.value;
-	movePage(++page);
 }
 
 </script>
