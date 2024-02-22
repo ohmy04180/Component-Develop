@@ -133,12 +133,7 @@ const paginationTotalCount: Ref<number> = ref<number>(Math.ceil(props.totalCount
 const currentPage = ref<number>(props.currentPage);
 const paginationList: Ref<Array<number>> = ref(Array.from({length: paginationTotalCount.value}, (_, i) => i + 1));
 
-//	METHODS
-function movePage(page: number): void {
-	currentPage.value = page;
-	emit("change", page);
-}
-
+// COMPUTED
 const calculatedPaginationList = computed(() => {
 	const currentCnt = currentPage.value;
 	const totalCnt = paginationTotalCount.value;
@@ -152,6 +147,11 @@ const calculatedPaginationList = computed(() => {
 	}
 });
 
+//	METHODS
+function movePage(page: number): void {
+	currentPage.value = page;
+	emit("change", page);
+}
 
 </script>
 
