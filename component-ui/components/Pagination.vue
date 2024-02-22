@@ -129,32 +129,29 @@ const props = defineProps({
 const emit = defineEmits(["change"]);
 
 //	DATA
-const paginationTotalCount = ref<Number>(Math.ceil(props.totalCount / props.perPage));
-const currentPage = ref<Number>(props.currentPage);
-const paginationList = ref(Array.from({length: paginationTotalCount.value}, (_, i) => i + 1));
-const calculatedPaginationList = ref<Array<number>>(
-	[...paginationList.value].slice(2, 5)
-);
+const paginationTotalCount: Ref<number> = ref<number>(Math.ceil(props.totalCount / props.perPage));
+const currentPage = ref<number>(props.currentPage);
+const paginationList: Ref<Array<number>> = ref(Array.from({length: paginationTotalCount.value}, (_, i) => i + 1));
 
 //	METHODS
 function movePage(page: number): void {
 	currentPage.value = page;
 	emit("change", page);
-
-	if (Number(paginationTotalCount.value) >= 8 && page > 3) {
-		checkMultiPagination(page);
-	}
 }
 
-function checkMultiPagination(page: number) {
-	if (page < Number(paginationList.value.at(-3))) {
-		calculatedPaginationList.value = calculatedPaginationList.value.map(
-			(num, index) => {
-				return page - 1 + index;
-			}
-		);
+const calculatedPaginationList = computed(() => {
+	const currentCnt = currentPage.value;
+	const totalCnt = paginationTotalCount.value;
+
+	if (currentCnt < 5) {
+		return paginationList.value.slice(2, 5);
+	} else if (currentCnt >= 5 && currentCnt < totalCnt - 3) {
+		return paginationList.value.slice(currentCnt - 2, currentCnt + 1);
+	} else {
+		return paginationList.value.slice(totalCnt - 5, totalCnt - 2);
 	}
-}
+});
+
 
 </script>
 
