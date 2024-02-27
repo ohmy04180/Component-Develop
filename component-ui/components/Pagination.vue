@@ -111,26 +111,19 @@
 
 <script setup lang="ts">
 import {ref} from "vue";
-import usePagination from "../composables/usePagination"
+import type PaginationProps from "./interfaces/props/PaginationProps";
+import usePagination from "../composables/usePagination";
+
+const props = withDefaults(defineProps<PaginationProps>(), {
+  totalCount: 0,
+  perPage: 20,
+  currentPage: 1
+});
 
 const {test} = usePagination();
 
 test();
 
-const props = defineProps({
-  totalCount: {
-    type: Number,
-    default: 0
-  },
-  perPage: {
-    type: Number,
-    default: 20
-  },
-  currentPage: {
-    type: Number,
-    default: 1
-  }
-});
 const emit = defineEmits(["change"]);
 
 //	DATA
