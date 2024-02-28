@@ -1,5 +1,5 @@
 import {ref, computed} from "vue";
-import type {PaginationProps} from "./Pagination.interface";
+import type {PaginationProps} from "./PaginationProps";
 
 interface PaginationComposition extends PaginationProps {
     currentPage:  Ref<number>;
