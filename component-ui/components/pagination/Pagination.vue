@@ -110,9 +110,8 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
-import type PaginationProps from "./interfaces/props/PaginationProps";
-import usePagination from "../composables/usePagination";
+import type {PaginationProps} from "../common/interfaces/props/Pagination.interface";
+import {PaginationComposition} from "./PaginationComposition";
 
 const props = withDefaults(defineProps<PaginationProps>(), {
   totalCount: 0,
@@ -120,36 +119,21 @@ const props = withDefaults(defineProps<PaginationProps>(), {
   currentPage: 1
 });
 
-const {test} = usePagination();
-
-test();
-
-const emit = defineEmits(["change"]);
-
-//	DATA
-const paginationTotalCount: Ref<number> = ref<number>(Math.ceil(props.totalCount / props.perPage));
-const currentPage = ref<number>(props.currentPage);
-const paginationList: Ref<Array<number>> = ref(Array.from({length: paginationTotalCount.value}, (_, i) => i + 1));
-
-// COMPUTED
-const calculatedPaginationList = computed(() => {
-  const currentCnt = currentPage.value;
-  const totalCnt = paginationTotalCount.value;
-
-  if (currentCnt < 5) {
-    return paginationList.value.slice(2, 5);
-  } else if (currentCnt >= 5 && currentCnt < totalCnt - 3) {
-    return paginationList.value.slice(currentCnt - 2, currentCnt + 1);
-  } else {
-    return paginationList.value.slice(totalCnt - 5, totalCnt - 2);
-  }
-});
-
-//	METHODS
-function movePage(page: number): void {
-  currentPage.value = page;
+const emit = defineEmits<{ (e: "change", page: number): void }>();
+// onChange
+function onChange(page: number): void {
   emit("change", page);
 }
+
+const {
+  totalCount,
+  perPage,
+  currentPage,
+  paginationTotalCount,
+  paginationList,
+  calculatedPaginationList,
+  movePage
+} = PaginationComposition(props, onChange);
 
 </script>
 
