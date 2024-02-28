@@ -1,13 +1,13 @@
-import {ref} from "vue";
+import {ref, computed} from "vue";
 import type {PaginationProps} from "../common/interfaces/props/Pagination.interface";
 
 interface PaginationComposition extends PaginationProps {
-    paginationTotalCount: Ref<number>,
-    currentPage: Ref<number>,
-    paginationList: Ref<number[]>,
-    calculatedPaginationList: Ref<number[]>,
-    movePage: (value: number) => void,
-    onChange: (value: number) => void
+    paginationTotalCount: Ref<number>;
+    currentPage: Ref<number>;
+    paginationList: Ref<number[]>;
+    calculatedPaginationList: Ref<number[]>;
+    movePage(value: number): void;
+    onChange(value: number): void;
 }
 
 export function PaginationComposition(
@@ -18,9 +18,9 @@ export function PaginationComposition(
     const currentPage: Ref<number> = ref<number>(props.currentPage);
     const paginationList: Ref<Array<number>> = ref(Array.from({length: paginationTotalCount.value}, (_, i) => i + 1));
 
-    const calculatedPaginationList = computed(() => {
-        const currentCnt = currentPage.value;
-        const totalCnt = paginationTotalCount.value;
+    const calculatedPaginationList: Ref<number[]> = computed(() => {
+        const currentCnt: number = currentPage.value;
+        const totalCnt: number = paginationTotalCount.value;
 
         if (currentCnt < 5) {
             return paginationList.value.slice(2, 5);
@@ -36,10 +36,12 @@ export function PaginationComposition(
     }
 
     const movePage: (page: number) => void = (page) => {
-        console.log('page', page)
         currentPage.value = page;
         onChange(page);
+        //
+        console.log('컴포지션의 currentPage', currentPage.value)
+        // console.log('page', page)
     }
 
-    return {...props, paginationTotalCount, paginationList, onChange, movePage, calculatedPaginationList}
+    return {...props, currentPage, paginationTotalCount, paginationList, calculatedPaginationList, onChange, movePage}
 }

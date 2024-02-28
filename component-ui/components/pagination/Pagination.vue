@@ -120,14 +120,12 @@ const props = withDefaults(defineProps<PaginationProps>(), {
 });
 
 const emit = defineEmits<{ (e: "change", page: number): void }>();
-// onChange
+
 function onChange(page: number): void {
   emit("change", page);
 }
 
 const {
-  totalCount,
-  perPage,
   currentPage,
   paginationTotalCount,
   paginationList,
