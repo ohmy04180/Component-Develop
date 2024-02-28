@@ -116,7 +116,7 @@ import {PaginationComposition} from "./PaginationComposition";
 const props = withDefaults(defineProps<PaginationProps>(), {
   totalCount: 0,
   perPage: 20,
-  currentPage: 1
+  currentPageNumber: 1
 });
 
 const emit = defineEmits<{ (e: "change", page: number): void }>();
