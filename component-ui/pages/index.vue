@@ -4,7 +4,7 @@
 		<Pagination
 			:totalCount="totalCount"
 			:perPage="perPage"
-			:currentPage="currentPage"
+			:currentPageNumber="currentPageNumber"
 			@change="checkCurrentPage"
 		></Pagination>
 	</div>
@@ -132,11 +132,11 @@ const postList: object[] = [
 ];
 const totalCount: number = postList.length;
 const perPage: number = 10;
-const currentPage = 1;
+const currentPageNumber = 1;
 
 // METHODS
 function checkCurrentPage(item): void {
-	console.log('Emit currentPage: ', item)
+	console.log('Emit currentPageNumber: ', item)
 }
 </script>
 <style>

@@ -110,7 +110,7 @@
 </template>
 
 <script setup lang="ts">
-import type {PaginationProps} from "../common/interfaces/props/Pagination.interface";
+import type {PaginationProps} from "./Pagination.interface";
 import {PaginationComposition} from "./PaginationComposition";
 
 const props = withDefaults(defineProps<PaginationProps>(), {
