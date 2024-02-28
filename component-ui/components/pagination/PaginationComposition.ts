@@ -16,7 +16,7 @@ export function PaginationComposition(
 ): PaginationComposition {
     const paginationTotalCount: Ref<number> = ref<number>(Math.ceil(props.totalCount / props.perPage));
     const currentPage: Ref<number> = ref<number>(props.currentPageNumber);
-    const paginationList: Ref<Array<number>> = ref(Array.from({length: paginationTotalCount.value}, (_, i) => i + 1));
+    const paginationList: Ref<number[]> = ref(Array.from({length: paginationTotalCount.value}, (_, i) => i + 1));
 
     const calculatedPaginationList: Ref<number[]> = computed(() => {
         const currentCnt: number = currentPage.value;
