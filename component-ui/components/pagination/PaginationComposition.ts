@@ -53,4 +53,5 @@ export function PaginationComposition(
     }
 
     return {...props, currentPage, paginationTotalCount, paginationList, calculatedPaginationList, onChange, movePage}
+
 }
