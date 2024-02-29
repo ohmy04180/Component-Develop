@@ -2,11 +2,13 @@ import {ref, computed} from "vue";
 import type {PaginationProps} from "./PaginationProps";
 
 interface PaginationComposition extends PaginationProps {
-    currentPage:  Ref<number>;
+    currentPage: Ref<number>;
     paginationTotalCount: Ref<number>;
     paginationList: Ref<number[]>;
     calculatedPaginationList: Ref<number[]>;
+
     movePage(value: number): void;
+
     onChange(value: number): void;
 }
 
@@ -14,9 +16,18 @@ export function PaginationComposition(
     props: PaginationProps,
     onchange: (page: number) => void
 ): PaginationComposition {
-    const paginationTotalCount: Ref<number> = ref<number>(Math.ceil(props.totalCount / props.perPage));
+
+    // DATA
     const currentPage: Ref<number> = ref<number>(props.currentPageNumber);
-    const paginationList: Ref<number[]> = ref(Array.from({length: paginationTotalCount.value}, (_, i) => i + 1));
+
+    // COMPUTED
+    const paginationTotalCount: Ref<number> = computed(() => {
+        return Math.ceil(props.totalCount / props.perPage)
+    })
+
+    const paginationList: Ref<number[]> = computed(() => {
+        return Array.from({length: paginationTotalCount.value}, (_, i) => i + 1);
+    })
 
     const calculatedPaginationList: Ref<number[]> = computed(() => {
         const currentCnt: number = currentPage.value;
@@ -31,6 +42,7 @@ export function PaginationComposition(
         }
     });
 
+    // METHODS
     const onChange: (page: number) => void = (page) => {
         onchange(page);
     }
